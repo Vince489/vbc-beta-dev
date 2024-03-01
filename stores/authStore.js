@@ -35,9 +35,7 @@ export const useAuthStore = defineStore({
         console.log('It works!! data:', data);
 
         // Call setUser action to update user data
-        this.setUser(data);
-        console.log('User Obj:', data.user);
-        
+        this.setUser(data);        
 
         return true;
       } catch (error) {
@@ -56,6 +54,18 @@ export const useAuthStore = defineStore({
         },
         credentials: 'include',
       });
+      // Clear user data
+      this.user = {};
+
+      // clear jwt from cookies without expiring it 
+      document.cookie = "jwt=; expires  Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+      // delete jwt from cookies
+      
+  
+
+      // Redirect to login page
+      this.$router.push('/login');
     },    
   },
 
@@ -77,11 +87,9 @@ export const useAuthStore = defineStore({
     
         // Parse response JSON
         const data = await response.json();
-        console.log('Data:', data);
+        console.log('GetUser:', data);
         // Call setUser action to update user data
         this.setUser(data);
-        // Return user data
-        return data.user;
       } catch (error) {
         // console.error('Error fetching user:', error.message);
         throw error;
